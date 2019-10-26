@@ -76,3 +76,70 @@ x|y x或者y中的一个字符 1|9|8|6
 
 
   */
+
+//元字符详细解析
+
+// ^ $
+
+let reg = /^\d/;
+console.log(reg.test("ken")); //=>false
+console.log(reg.test("2019ken")); //=>true
+console.log(reg.test("ken2019")); //=>false
+
+let reg = /\d$/;
+console.log(reg.test("ken")); //=>false
+console.log(reg.test("2019ken")); //=>true
+console.log(reg.test("ken2019")); //=>true
+
+// =>^/$ 两个都不加：字符串中包含符合规则的内容即可
+let reg1 = /\d+/;
+
+//=>^/$ 两个都加：字符串只能是和规则一致的内容
+let reg1 = /^\d+$/;
+
+//举个例子：验证手机号码（11未，第一个数字是1即可）
+let reg3 = /^1\d{10}$/; //(1后面加10个数字)
+
+//转义字符    \
+// . 代表的不是小数点   是除了 \n  之外的任意字符
+let reg = /^2.3$/;
+console.log(reg.test("2.3")); //=>true
+console.log(reg.test("2@3")); //=>true
+console.log(reg.test("2&3")); //=>true
+console.log(reg.test("23")); //=>false
+
+let reg1 = /^2\.3$/; //  \.转义为  只是 .
+console.log(reg.test("2.3")); //=>true
+console.log(reg.test("2@3")); //=>false
+console.log(reg.test("2&3")); //=>false
+console.log(reg.test("23")); //=>false
+
+let str = "\\d";
+let reg2 = /^\d$/; // => \d 代表特殊含义  0-9数字
+reg2.test(str); //false
+
+let reg2 = /^\\d$/; // => \d 代表特殊含义  0-9数字
+reg2.test(str); //true
+
+// x|y
+
+let reg = /^18|29$/;
+
+console.log(reg.test("18")); //=>true
+console.log(reg.test("29")); //=>true
+console.log(reg.test("129")); //=>true
+console.log(reg.test("189")); //=>true
+console.log(reg.test("1829")); //=>true
+console.log(reg.test("829")); //=>true
+console.log(reg.test("182")); //=>true
+
+///// --- 直接x|y 会存在优先级问题，一般我们写的时候都伴随着小括号进行分组，因为小括号改变处理的优先级=>小括号：分组
+let reg = /^(18|29)$/;  //只能是18或者29的其中一个
+
+console.log(reg.test("18")); //=>true
+console.log(reg.test("29")); //=>true
+console.log(reg.test("129")); //=>false
+console.log(reg.test("189")); //=>false
+console.log(reg.test("1829")); //=>false
+console.log(reg.test("829")); //=>false
+console.log(reg.test("182")); //=>false
