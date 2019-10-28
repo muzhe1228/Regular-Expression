@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //   let str = "webken2019yangfan2020qihang2021";
+
+      /**
+       * reg.lastIndex: 当前正则下一次匹配的起始索引位置
+       * 懒惰性的原因：默认情况下lastIndex的值不会被修改，
+       * 每一次都是从字符串开始位置查找，所以找的永远都是第一个
+       * 解决办法：全局修饰符g
+       */
+      //    let reg = /\d+/
+      //   console.log(reg.lastIndex); //=>0
+      //   console.log(reg.exec(str));
+      //   console.log(reg.lastIndex); //=>0 第一次捕获完，lastIndex 值不会改变
+
+      //设置全局修饰符后lastIndex更新
+      //   let reg = /\d+/g;
+
+      //   console.log(reg.lastIndex); //=>0
+      //   console.log(reg.exec(str)); //[2019]
+      //   console.log(reg.lastIndex); //=>10 第一次捕获完，lastIndex 改变为10
+      //   console.log(reg.exec(str)); //[2020]
+      //   console.log(reg.exec(str)); //[2021]
+      //   console.log(reg.exec(str)); //null 当全部捕获后，再次捕获的时候为null，但是lastIndex又回归了初始值零
+
+      //   let reg = /\d+/g;
+      //   if (res.test(str)) {
+      //     //=>验证一下：只有正则和字符串匹配我们再捕获
+      //     console.log(reg.lastIndex); //=>10  lastIndex再test时候已经被修改了，下次捕获不会重头修改了
+      //     console.log(reg.exec(str)); //[2020]
+      //   }
+
+      //=>需求：编写一个方法exxecAll ，执行一次可以把所有匹配的结果捕获到（前提正则一定要设置全局匹配g）
+      ~(function() {
+        function execAll(str = "") {
+          //=>str：需要匹配的字符串
+          //=>this.RegExp 的实例（当前操作的正则）
+          //=>进来后的第一件事，验证正则是否设置g，不设置不能循环捕获
+          if (!this.global) return this.exec(str);
+          //ary 存储所有捕获到的信息   REs 存储每次捕获的内容
+          let ary = [],
+            res = this.exec(str);
+          while (res) {
+            //把每次捕获的内容res[0]存放到数组中
+            ary.push(res[0]);
+            //只要捕获的内容部位NULL，则继续捕获下去
+            res = this.exec(str);
+          }
+          return ary.length === 0 ? null : ary;
+        }
+        RegExp.prototype.execAll = execAll;
+      })();
+      let reg = /\d+/g;
+      console.log(reg.execAll("webken2019yangfan2020qihang2021"));
+      //=>字符串中的MATCH方法，可以在执行一次的情况下，捕获到所有匹的数据（前提：正则也得设置g）
+      console.log("webken2019yangfan2020qihang2021".match(reg));
+    </script>
+  </body>
+</html>

@@ -1,3 +1,5 @@
+
+
 # Regular-Expression
 
 ## 正则表达式
@@ -86,6 +88,8 @@ g => global  全局匹配
 
 ------
 
+
+
 #### 1.验证是否是有效数字
 
 ```javascript
@@ -167,5 +171,66 @@ let reg = /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-|\+)[A-Za-z0-9]+)*\.[A-Za-z0-
   var reg = /^(\d{6})(\d{4})(\d{2})(\d{2})\d{2}(\d)(\d|X)$/
   reg.exec('411421199512107218') //=>["411421199512107218", "411421", "1995", "12", "10", "1", "8"]  捕获结果是数组，包含每一个小分组单独获取的内容
 
+```
+
+### 正则两种创建方式的区别
+
+------
+
+
+
+```javascript
+//=>构造函数因为传递的是字符串，\需要传递两个才代表斜杠
+let reg = /\d+/g;
+reg = new RegExp("\\d+","g");
+
+//=>正则表达式中的部分内容是变量存储的值
+// 1.两个斜杠中间包起来的都是元字符（如果正则中药包含某个变量的值，则不能使用变量形式创建）
+let type = "webken";
+reg = /^@"+type+"@$/;
+console.log(reg.test("@webken@")); //=>false
+console.log(reg.test('@"""typeeee"@')); //=>true
+//2.这种情况只能使用构造函数方式（因为它传递的规则是字符串，只有这样才能进行字符串拼接）
+reg = new RegExp("@"+type+"@$");
+console.log(reg.test("@webken@"))
+
+```
+
+### 正则的捕获
+
+------
+
+> 实现正则捕获的办法
+>
+> * 正则RegExp.prototype的方法
+>   * exec
+>   * test
+>
+> * 字符串String.prototype上支持正则表达式处理的方法
+>   * replace
+>   * match
+>   * splite
+>   * .......
+
+```javascript
+let str = 'webken2019yangfan2020qihang2021';
+let reg = /\d+/;
+/*
+ * 基于exec实现正则的捕获
+ *   1.捕获到的记过是null或者一个数组
+ *     第一项：本次捕获到的内容
+ *     其余项：对应小分组本次单独捕获的内容
+ *     index：当前捕获内容在字符串中的其实索引
+ *     input：原始字符串
+ *   2.每执行一次exec，只能捕获到一个符合正则规则的，但是默认情况下，我们执行一百遍，获取的结果永远都是第一个匹配德奥的，其余的捕获不到
+ *    =>"正则捕获的懒惰性"：默认只捕获第一次
+ */
+console.log(reg.exec(str));//["2019", index: 6, input: "webken2019yangfan2020qihang2021"]
+/*
+let reg = /^\d+$/;
+=>实现正则捕获的前提是：当前正则要和字符串匹配，如果不匹配捕获的结果是null
+console.log(reg.test(str));//=>false
+console.log(reg.exec(str));//=>null
+*/
 ```
 
