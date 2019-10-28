@@ -1,5 +1,9 @@
 # Regular-Expression
-正则表达式学习笔记
+
+
+
+
+
 ## 正则表达式
 
 - **量词元字符**
@@ -62,7 +66,7 @@
 
 
 
-- 普通元字符：代表本身含义
+- **普通元字符：代表本身含义**
 
   ```javascript
   /webken/ 正则匹配的就是  webken
@@ -70,7 +74,7 @@
 
 
 
-- 修饰符  "img"
+- **修饰符  "img"**
 
   ```javascript
   i => ignoreCase  忽略单词大小写匹配
